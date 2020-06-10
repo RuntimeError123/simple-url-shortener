@@ -48,7 +48,8 @@
         mysqli_query($db, "UPDATE links SET visits = visits + 1, last_visited = NOW() WHERE slug = '$escaped_slug'") or error('Could not increment visit count.', 500);
 
         $escaped_referer = mysqli_real_escape_string($db, $_SERVER['HTTP_REFERER']);
-        mysqli_query($db, "INSERT INTO visits (slug, visit_date, referer) VALUES ('$escaped_slug', NOW(), '$escaped_referer')") or error('Could not record visit.', 500);
+        $remote_address = $_SERVER['REMOTE_ADDR'];
+        mysqli_query($db, "INSERT INTO visits (slug, visit_date, referer, remote_address) VALUES ('$escaped_slug', NOW(), '$escaped_referer', '$remote_address')") or error('Could not record visit.', 500);
 
         $row = mysqli_fetch_row($result);
         $url = $row[0];
@@ -202,11 +203,12 @@
             echo "</tbody></table>";
 
             echo "<h2>Recent Visits</h2>";
-            echo "<table><thead><td><strong>Date</strong></td><td><strong>Referer</strong></td></thead><tbody>";
+            echo "<table><thead><td><strong>Date</strong></td><td><strong>Referer</strong></td><td><strong>Remote address</strong></td></thead><tbody>";
             foreach($data['visits'] as $visit) {
                 echo "<tr>";
                 echo "<td>" . $visit['visit_date'] . "</td>";
                 echo "<td><a href='{$visit['referer']}'>{$visit['referer']}</a></td>";
+                echo "<td>" . $visit['remote_address'] . "</td>";
                 echo "</tr>";
             }
             echo "</tbody></table>";

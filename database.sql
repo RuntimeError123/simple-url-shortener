@@ -27,5 +27,6 @@ CREATE TABLE `visits` (
   `slug` varchar(15) DEFAULT NULL,
   `visit_date` datetime DEFAULT NULL,
   `referer` text,
+  `remote_address` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
