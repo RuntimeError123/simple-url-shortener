@@ -182,6 +182,8 @@
         }
         array_multisort($reffering_domains, SORT_DESC);
         $data['referers'] = $reffering_domains;
+        
+        array_multisort($data['visits'], SORT_DESC);
 
         if($accepts_json) {
             echo json_encode($data);
