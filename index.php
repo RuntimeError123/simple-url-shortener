@@ -1,19 +1,21 @@
-<?PHP
-	require 'config.php';
+<?php
+require 'config.php';
 
-    // ##############################################
-    // ##### NOTHING FURTHER TO CONFIGURE BELOW #####
-    // ##############################################
+// Enable MySQLi error reporting
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-    $s = (empty($_SERVER['HTTPS']) ? '' : ($_SERVER['HTTPS'] == 'on')) ? 's' : '';
-    $base_url = "http$s://" . $_SERVER['HTTP_HOST'] . '/';
+try {
+    // Establish database connection
+    $db = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+    $db->set_charset("utf8mb4"); // Set character set to utf8mb4 for better compatibility
+} catch (mysqli_sql_exception $e) {
+    error('Could not connect to database: ' . $e->getMessage(), 500);
+}
 
-    $db = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname) or error('Could not connect to database.', 500);
-
-    $accepts_json = $_SERVER['HTTP_ACCEPT'] == 'application/json' ? true : false;
-    if($accepts_json) {
-        header('Content-Type: application/json');
-    }
+$accepts_json = isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] == 'application/json' ? true : false;
+if ($accepts_json) {
+    header('Content-Type: application/json');
+}
 
     if($_SERVER['REQUEST_URI'] == '/') { doNothing(); exit; }
     if($pw_stats == '' && preg_match('!^/stats(/?.*)$!', $_SERVER['REQUEST_URI']) == 1) { stats(); exit; }
@@ -47,7 +49,7 @@
 
         mysqli_query($db, "UPDATE links SET visits = visits + 1, last_visited = NOW() WHERE slug = '$escaped_slug'") or error('Could not increment visit count.', 500);
 
-        $escaped_referer = mysqli_real_escape_string($db, $_SERVER['HTTP_REFERER']);
+        $escaped_referer = isset($_SERVER['HTTP_REFERER']) ? mysqli_real_escape_string($db, $_SERVER['HTTP_REFERER']) : '';
         $remote_address = $_SERVER['REMOTE_ADDR'];
         mysqli_query($db, "INSERT INTO visits (slug, visit_date, referer, remote_address) VALUES ('$escaped_slug', NOW(), '$escaped_referer', '$remote_address')") or error('Could not record visit.', 500);
 
@@ -235,3 +237,6 @@
 
         exit;
     }
+
+    $db->close();
+?>
