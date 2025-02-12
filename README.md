@@ -35,9 +35,3 @@ Your stats pages can also be password protected. Just set the `$pw_stats` variab
 
 This project aims to be as simple-to-use as possible by making all commands and interactions go through a simple URL-based API which returns plain-text or HTML. However, if you're looking to run a script against the shortening service, you can do so. Just pass along `Accept: application/json` in your `HTTP` headers and the service will return all of its output as JSON data - including the stats pages.
 
-## Contributions / Pull Requests / Bug Reports
-
-Bug fixes, new features, and improvements are welcome from anyone. Feel free to [open an issue](https://github.com/tylerhall/simple-url-shortener/issues) or [submit a pull request](https://github.com/tylerhall/simple-url-shortener/pulls).
-
-I consider the current state of the project to be feature-complete for my needs and am not looking to add additional features with heavy dependencies or that complicate the simple install process. That said, I'm more than happy to look at any new features or changes you think would make the project better. Feel free to [get in touch](https://tyler.gd/3qumd
-).
