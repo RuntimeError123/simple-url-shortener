@@ -148,10 +148,9 @@ function stats() {
         echo "<table><thead><td><strong>Created</strong></td><td><strong>Slug</strong></td><td><strong>URL</strong></td><td><strong>Visits</strong></td><td><strong>Last Visit</strong></td><td><strong>Top Referer</strong></td><td></td></thead>";
         echo "<tbody>";
         foreach ($data as $link) {
-            $short_url = $base_url . $link['slug'];
             echo "<tr>";
             echo "<td>{$link['created']}</td>";
-            echo "<td><a href='$short_url'>{$link['slug']}</a></td>";
+            echo "<td><a href='/{$link['slug']}'>{$link['slug']}</a></td>";
             echo "<td><a href='{$link['url']}'>{$link['url']}</a></td>";
             echo "<td>{$link['visits']}</td>";
             echo "<td>{$link['last_visited']}</td>";
